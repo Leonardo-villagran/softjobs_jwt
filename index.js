@@ -59,7 +59,5 @@ app.post("/usuarios", async (req, res) => {
     }
 })
 
-
-
 app.listen(PORT, console.log("SERVER ON on port: " + PORT))
 

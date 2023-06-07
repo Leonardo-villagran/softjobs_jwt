@@ -38,7 +38,6 @@ const obtenerDatosUsuario = async (email) =>{
     return rows[0];
 }
 
-
 const registrarUsuario = async (usuario) => {
     const { email, password, rol, lenguage } = usuario;
     const passwordEncriptada = bcrypt.hashSync(password);
