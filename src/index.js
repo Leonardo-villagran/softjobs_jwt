@@ -38,7 +38,7 @@ app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body
         await verificarCredenciales(email, password)
-        const token = jwt.sign({ email }, "az_AZ")
+        const token = jwt.sign({ email }, process.env.JWT_SECRET)
         res.send(token)
     } catch (error) {
         console.log(error)
@@ -50,7 +50,7 @@ app.get("/usuarios", async (req, res) => {
     try {
         const Authorization = req.header("Authorization")
         const token = Authorization.split("Bearer ")[1]
-        jwt.verify(token, "az_AZ")
+        jwt.verify(token, process.env.JWT_SECRET)
         const { email } = jwt.decode(token)
         result = await obtenerDatosUsuario(email);
         console.log(result);
