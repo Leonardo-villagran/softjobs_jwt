@@ -45,9 +45,9 @@ app.post("/login", customReportMiddleware,async (req, res) => {
         await verificarCredenciales(email, password)
         const token = jwt.sign({email}, process.env.JWT_SECRET)
         res.send(token)
-    } catch (error) {
-        console.log(error)
-        res.status(error.code || 500).send(error.message)
+    } catch ({ code, message }) {
+        //console.log(error)
+        res.status(code || 500).send(message)
     }
 })
 
@@ -61,8 +61,8 @@ app.get("/usuarios", customReportMiddleware,async (req, res) => {
         //console.log(result);
         res.json(result);
         
-    } catch (error) {
-        res.status(500).send(error);
+    } catch ({ code, message }) {
+        res.status(code || 500).send(message);
     }
 })
 app.post("/usuarios", customReportMiddleware, async (req, res) => {
@@ -71,9 +71,8 @@ app.post("/usuarios", customReportMiddleware, async (req, res) => {
         const row = await registrarUsuario(usuario);
         //console.log(row);
         res.status(201).send("Usuario creado con éxito");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error);
+    } catch ({ code, message }) {
+        res.status(code || 500).send(message);
     }
 })
 

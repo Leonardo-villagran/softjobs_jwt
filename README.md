@@ -67,8 +67,8 @@ La API proporciona los siguientes endpoints:
 ```
 Usuario creado con éxito
 ```
-* Error de registro (Código 500):
-```
+* Error de registro:
+```go
 Mensaje de error
 ```
 ### Login de Usuario
@@ -86,7 +86,7 @@ Mensaje de error
 ```
 Token JWT válido
 ```
-*Error de login (Código 500):
+*Error de login:
 ```go
 Mensaje de error
 ```
@@ -105,7 +105,7 @@ Mensaje de error
 }
 
 ```
-* Error de autorización (Código 500):
+* Error de autorización:
 
 ```go
 Mensaje de error
@@ -121,3 +121,4 @@ La aplicación captura y maneja los errores utilizando bloques try-catch. Los er
 * Las contraseñas se almacenan de forma encriptada en la base de datos.
 * Se utiliza JWT (JSON Web Tokens) para la autenticación y autorización de usuarios.
 * Se implementa una verificación básica de autorización utilizando el token JWT para proteger las rutas de la API. El token se envía en el encabezado Authorization con el prefijo `Bearer`.
+* El sistema no permite que se ingresen dos usuarios con el mismo e-mail.
