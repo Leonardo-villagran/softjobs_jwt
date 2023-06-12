@@ -41,15 +41,15 @@ const { verificarCredenciales, registrarUsuario, obtenerDatosUsuario } = require
 
 app.post("/login", customReportMiddleware,async (req, res) => {
     try {
-        const { email, password } = req.body
-        await verificarCredenciales(email, password)
-        const token = jwt.sign({email}, process.env.JWT_SECRET)
-        res.send(token)
+        const { email, password } = req.body;
+        await verificarCredenciales(email, password);
+        const token = jwt.sign({email}, process.env.JWT_SECRET);
+        res.send(token);
     } catch ({ code, message }) {
         //console.log(error)
-        res.status(code || 500).send(message)
+        res.status(code || 500).send(message);
     }
-})
+});
 
 app.get("/usuarios", customReportMiddleware,async (req, res) => {
     try {
@@ -64,7 +64,7 @@ app.get("/usuarios", customReportMiddleware,async (req, res) => {
     } catch ({ code, message }) {
         res.status(code || 500).send(message);
     }
-})
+});
 app.post("/usuarios", customReportMiddleware, async (req, res) => {
     try {
         const usuario = req.body;
@@ -74,11 +74,11 @@ app.post("/usuarios", customReportMiddleware, async (req, res) => {
     } catch ({ code, message }) {
         res.status(code || 500).send(message);
     }
-})
+});
 
 app.get("*", customReportMiddleware, (req, res) => {
     res.status(404).send("Esta ruta no existe"); // Ruta para manejar todas las demás rutas no definidas
 });
 
-app.listen(PORT, console.log("SERVER ON on port: " + PORT))
+app.listen(PORT, console.log("SERVER ON on port: " + PORT));
 
