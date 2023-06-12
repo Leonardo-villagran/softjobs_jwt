@@ -15,7 +15,7 @@ git clone https://github.com/Leonardo-villagran/softjobs_jwt
 2. Instala las dependencias:
 
 ```makefile
-cd express-user-registration-login-api
+cd softjobs_jwt
 npm install
 ```
 3. Configuración de variables de entorno:
@@ -24,7 +24,7 @@ npm install
 * Agrega las siguientes variables y proporciona los valores correspondientes (los datos presentados son solo de ejemplo, utilizar los propios que correspondan a su configuración):
 
 ``` bash
-#Variables de entorno
+##Config localhost 
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
