@@ -9,12 +9,12 @@ Esta es una aplicación en Express que proporciona endpoints de API para el regi
 1. Instalación
 * Clona el repositorio:
 
-```
-git clone https://github.com/tu/repositorio.git
+```markdown
+git clone https://github.com/Leonardo-villagran/softjobs_jwt
 ```
 2. Instala las dependencias:
 
-```
+```makefile
 cd express-user-registration-login-api
 npm install
 ```
