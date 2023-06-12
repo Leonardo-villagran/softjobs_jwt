@@ -2,7 +2,7 @@
 
 >Tarea 6: Autenticación y Autorización de usuarios con JWT de DesafioLatam para el módulo: Backend con Node y Express (G27).
 
-Esta es una aplicación en Express que proporciona endpoints de API para el registro y login de usuarios. Permite al front-end registrar nuevos usuarios con correo electrónico, contraseña, rol y lenguaje de programación. La aplicación utiliza JWT (JSON Web Tokens) para la autenticación y autorización de usuarios. Además, se implementa un middleware para generar reportes de las solicitudes recibidas.
+Aplicación en Express que proporciona endpoints de API para el registro y login de usuarios. Permite al front-end registrar nuevos usuarios con correo electrónico, contraseña, rol y lenguaje de programación. La aplicación utiliza JWT (JSON Web Tokens) para la autenticación y autorización de usuarios. Además, se implementa un middleware para generar reportes de las solicitudes recibidas.
 
 ## Instalación
 
