@@ -7,7 +7,7 @@ require('dotenv').config();
 app.use(cors())
 app.use(express.json())
 
-app.use((req, res, next) => {
+function customReportMiddleware(req, res, next) {
     const { method, originalUrl, body, protocol, hostname } = req;
     // Generar timestamp de hoy
     const timestamp = new Date();
@@ -24,21 +24,26 @@ app.use((req, res, next) => {
     console.log('Fecha: ', fechaLatino);
     console.log('Hora:  ', hora);
     console.log(`Método: ${method}`);
-    if (Object.keys(body).length > 0) console.log('Datos:', body);
+    if (Object.keys(body).length > 0){
+        console.log(`Datos:`);
+        if (body.email) console.log('-Email: ',body.email);
+        if (body.rol) console.log('-Rol: ',body.rol);
+        if (body.lenguage) console.log('-Lenguaje: ',body.email);
+    }
     console.log(`-----------------------------------`);
     next();
-});
+};
 
 //generar constante que determina el puerto a usar
 const PORT = process.env.PORT || 3000;
 
 const { verificarCredenciales, registrarUsuario, obtenerDatosUsuario } = require('./controllers/consultas.js');
 
-app.post("/login", async (req, res) => {
+app.post("/login", customReportMiddleware,async (req, res) => {
     try {
         const { email, password } = req.body
         await verificarCredenciales(email, password)
-        const token = jwt.sign({ email }, process.env.JWT_SECRET)
+        const token = jwt.sign({email}, process.env.JWT_SECRET)
         res.send(token)
     } catch (error) {
         console.log(error)
@@ -46,21 +51,21 @@ app.post("/login", async (req, res) => {
     }
 })
 
-app.get("/usuarios", async (req, res) => {
+app.get("/usuarios", customReportMiddleware,async (req, res) => {
     try {
-        const Authorization = req.header("Authorization")
-        const token = Authorization.split("Bearer ")[1]
-        jwt.verify(token, process.env.JWT_SECRET)
-        const { email } = jwt.decode(token)
+        const Authorization = req.header("Authorization");
+        const token = Authorization.split("Bearer ")[1];
+        jwt.verify(token, process.env.JWT_SECRET);
+        const { email } = jwt.decode(token);
         result = await obtenerDatosUsuario(email);
-        console.log(result);
+        //console.log(result);
         res.json(result);
         
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send(error);
     }
 })
-app.post("/usuarios", async (req, res) => {
+app.post("/usuarios", customReportMiddleware, async (req, res) => {
     try {
         const usuario = req.body;
         const row = await registrarUsuario(usuario);
@@ -68,9 +73,13 @@ app.post("/usuarios", async (req, res) => {
         res.status(201).send("Usuario creado con éxito");
     } catch (error) {
         console.error(error);
-        res.status(500).send(error)
+        res.status(500).send(error);
     }
 })
+
+app.get("*", customReportMiddleware, (req, res) => {
+    res.status(404).send("Esta ruta no existe"); // Ruta para manejar todas las demás rutas no definidas
+});
 
 app.listen(PORT, console.log("SERVER ON on port: " + PORT))
 

@@ -21,9 +21,10 @@ npm install
 3. Configuración de variables de entorno:
 
 * Crea un archivo .env en la raíz del proyecto.
-* Agrega las siguientes variables y proporciona los valores correspondientes:
+* Agrega las siguientes variables y proporciona los valores correspondientes (los datos presentados son solo de ejemplo, utilizar los propios que correspondan a su configuración):
 
-```
+``` bash
+#Variables de entorno
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
@@ -37,8 +38,12 @@ PORT=3000
 
 4. Iniciar el servidor:
 
+```arduino
+npm run start
 ```
-npm start
+o
+```arduino
+npm run dev
 ```
 La API estará disponible en `http://localhost:3000`.
 
@@ -49,7 +54,7 @@ La API proporciona los siguientes endpoints:
 * URL: `POST /usuarios`
 * Cuerpo de la solicitud:
 
-```
+```json
 {
   "email": "usuario@example.com",
   "password": "contraseña",
@@ -66,14 +71,33 @@ Usuario creado con éxito
 ```
 Mensaje de error
 ```
+### Login de Usuario
 
-* Obtener Datos de Usuario
+* URL: `POST /login`
+* Cuerpo de la solicitud:
+
+```json
+{
+  "email": "usuario@example.com",
+  "password": "contraseña"
+}
+```
+* Respuesta exitosa (Código 200):
+```
+Token JWT válido
+```
+*Error de login (Código 500):
+```go
+Mensaje de error
+```
+
+### Obtener Datos de Usuario
 * URL: `GET /usuarios`
 * Encabezados:
-    * Authorization: Bearer <token>
-*Respuesta exitosa (Código 200):
+  * Authorization: `Bearer <token>`
+* Respuesta exitosa (Código 200):
 
-```
+```json
 {
   "email": "usuario@example.com",
   "rol": "rol del usuario",
@@ -83,12 +107,12 @@ Mensaje de error
 ```
 * Error de autorización (Código 500):
 
-```
+```go
 Mensaje de error
 ```
 
 ## Middleware de Reporte
-La aplicación utiliza un middleware para generar un reporte de cada solicitud recibida. El reporte se muestra en la consola y contiene la URL, fecha, hora, método y datos de la solicitud.
+La aplicación utiliza un middleware para generar un reporte de cada solicitud recibida. El reporte se muestra en la consola y contiene la URL, fecha, hora, método y datos del req.body de la solicitud, si la consulta no posee algún dato en el req.body, se realizan condicionales para evitar mostrar campos vacíos.  
 
 ## Manejo de Errores
 La aplicación captura y maneja los errores utilizando bloques try-catch. Los errores se devuelven con códigos de estado adecuados y mensajes descriptivos en la respuesta.
