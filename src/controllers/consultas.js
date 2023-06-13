@@ -13,7 +13,7 @@ const pool = new Pool({
 });
 
 const verificarCredenciales = async (email, password) => {
-        
+
     let usuario;
     let rowCount;
 
@@ -64,23 +64,34 @@ const obtenerDatosUsuario = async (email) => {
 }
 
 const registrarUsuario = async (usuario) => {
+
     try {
         const { email, password, rol, lenguage } = usuario;
 
         // Verificar si el email ya está registrado
         const emailExistente = await pool.query("SELECT email FROM usuarios WHERE email = $1", [email]);
+        //console.log(emailExistente.rows.length)
         if (emailExistente.rows.length > 0) {
             throw { code: 400, message: "El email ya está registrado" };
+        } else {
+            // Encriptar la password antes de registrar al usuario en la base de datos
+            const passwordEncriptada = bcrypt.hashSync(password);
+            const values = [email, passwordEncriptada, rol, lenguage];
+            //Insertar nuevo usuario en la base de datos. 
+            const consulta = "INSERT INTO usuarios (email, password, rol, lenguage) values($1,$2,$3,$4) RETURNING *";
+            const result = await pool.query(consulta, values);
+            console.log("Usuario creando con éxito.")
+            return result.rows[0];
         }
-        // Encriptar la password antes de registrar al usuario en la base de datos
-        const passwordEncriptada = bcrypt.hashSync(password);
-        const values = [email, passwordEncriptada, rol, lenguage];
-        //Insertar nuevo usuario en la base de datos. 
-        const consulta = "INSERT INTO usuarios (email, password, rol, lenguage) values($1,$2,$3,$4) RETURNING *";
-        const result = await pool.query(consulta, values);
-        return result.rows[0];
+
     } catch (error) {
-        throw { code: error.code || 500, message: "Hay un error interno en el sistema." };
+        if (error.code) {
+            // Si el error tiene un código definido, se lanza tal cual
+            throw error;
+        } else {
+            // Si el error es genérico, se lanza con el código 500
+            throw { code: 500, message: "Hay un error interno en el sistema." };
+        }
     }
 }
 
