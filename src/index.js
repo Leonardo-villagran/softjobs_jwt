@@ -23,6 +23,7 @@ app.post("/login", VerificarCredencialesM, async (req, res) => {
         const { email, password } = req.body;
         await verificarCredenciales(email, password);
         const token = jwt.sign({ email }, process.env.JWT_SECRET);
+        console.log("Token generado para usuario: ",email);
         res.send(token);
     } catch ({ code, message }) {
         console.log(message);
