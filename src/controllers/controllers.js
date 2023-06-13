@@ -1,16 +1,6 @@
-const { Pool } = require('pg');
 require('dotenv').config();
-const bcrypt = require('bcryptjs')
-
-//Conexión a la base de datos
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-    allowExitOnIdle: true
-});
+const bcrypt = require('bcryptjs');
+const pool = require('../config/database'); 
 
 const verificarCredenciales = async (email, password) => {
 
@@ -33,7 +23,7 @@ const verificarCredenciales = async (email, password) => {
 
     //Verificar si el usuario existe en la base de datos
     if (!usuario || !usuario.password) {
-        throw { code: 401, message: "Usuario no existe" };
+        throw { code: 401, message: "Usuario no existe en el sistema." };
     }
 
     //Obtener la password encriptada desde la base de datos
@@ -43,7 +33,7 @@ const verificarCredenciales = async (email, password) => {
 
     //Verificar que la password coincide con la que se encuentra en la base de datos
     if (!passwordEsCorrecta || !rowCount) {
-        throw { code: 401, message: "Email o contraseña incorrecta" };
+        throw { code: 401, message: "Email o contraseña incorrecta." };
     }
 
 };
@@ -55,8 +45,7 @@ const obtenerDatosUsuario = async (email) => {
         const consulta = "SELECT email, rol, lenguage FROM usuarios WHERE email=$1";
         const values = [email];
         const { rowCount, rows } = await pool.query(consulta, values)
-        if (!rowCount)
-            throw { code: 404, message: "No se encontró ningún usuario con ese email." }
+        if (!rowCount) throw { code: 404, message: "No se encontró ningún usuario con ese email." }
         return rows[0];
     } catch (error) {
         throw { code: error.code || 500, message: "Hay un error interno en el sistema." };
@@ -72,7 +61,8 @@ const registrarUsuario = async (usuario) => {
         const emailExistente = await pool.query("SELECT email FROM usuarios WHERE email = $1", [email]);
         //console.log(emailExistente.rows.length)
         if (emailExistente.rows.length > 0) {
-            throw { code: 400, message: "El email ya está registrado" };
+            
+            throw { code: 400, message: "El email ya está registrado." };
         } else {
             // Encriptar la password antes de registrar al usuario en la base de datos
             const passwordEncriptada = bcrypt.hashSync(password);
@@ -80,7 +70,7 @@ const registrarUsuario = async (usuario) => {
             //Insertar nuevo usuario en la base de datos. 
             const consulta = "INSERT INTO usuarios (email, password, rol, lenguage) values($1,$2,$3,$4) RETURNING *";
             const result = await pool.query(consulta, values);
-            console.log("Usuario creando con éxito.")
+            console.log("Usuario creado con éxito.")
             return result.rows[0];
         }
 
@@ -90,6 +80,7 @@ const registrarUsuario = async (usuario) => {
             throw error;
         } else {
             // Si el error es genérico, se lanza con el código 500
+            console.log("Hay un error interno en el sistema.");
             throw { code: 500, message: "Hay un error interno en el sistema." };
         }
     }
