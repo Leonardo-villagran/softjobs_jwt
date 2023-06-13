@@ -28,7 +28,7 @@ npm install
 
 * Crea un archivo .env en la raíz del proyecto.
 * Agrega las siguientes variables y proporciona los valores correspondientes (los datos presentados son solo de ejemplo, utilizar los propios que correspondan a su configuración).
-* Reemplaza tu_clave_secreta con una clave secreta fuerte para la generación del token JWT.
+* Reemplaza tu clave secreta `JWT_SECRET` con una clave secreta fuerte para la generación del token JWT.
 
 ``` bash
 ##Config localhost 
@@ -117,12 +117,12 @@ Mensaje de error
 ```
 
 ## Middlewares
--La aplicación utiliza middlewares para el uso de cors y json. 
--Se genera un middleware para obtener un reporte de las distintas solicitudes.
--Se genera un middleware para determinar si hay conexión a la base de datos.
--Se genera un middleware para verificar si los datos de usuario ingresados en el formulario de registro están completos.
--Se genera un middleware para verificar si las credenciales se ingresan de forma correcta antes de crear el token.
--Se genera un middleware para determinar si el token de usuario existe y luego validarlo para el acceso de rutas protegidas. 
+- La aplicación utiliza middlewares para el uso de cors y json. 
+- Se genera un middleware para obtener un reporte de las distintas solicitudes.
+- Se genera un middleware para determinar si hay conexión a la base de datos.
+- Se genera un middleware para verificar si los datos de usuario ingresados en el formulario de registro están completos.
+- Se genera un middleware para verificar si las credenciales se ingresan de forma correcta antes de crear el token.
+- Se genera un middleware para determinar si el token de usuario existe y luego validarlo para el acceso de rutas protegidas. 
 
 ## Manejo de Errores
 La aplicación captura y maneja los errores utilizando bloques try-catch. Los errores se devuelven con códigos de estado adecuados y mensajes descriptivos en la respuesta.
